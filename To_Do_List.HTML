@@ -1,0 +1,142 @@
+<html>
+<head>
+	<title>
+		TO-10
+	</title>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<style>
+	#submitBtn
+	{
+		background-color: grey;
+	}
+	table
+	{
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+	th
+	{
+		border: 1px solid black;
+		padding: 5px;
+	}
+	td
+	{
+		border: 1px solid black;
+		padding: 5px;
+	}
+</style>
+
+
+<script>
+	var selectedRow = null;
+
+	function page()
+	{
+		document.getElementById("name").onkeyup=checkAll;
+		document.getElementById("email").onkeyup=checkAll;
+		document.getElementById("password").onkeyup=checkAll;
+		document.getElementById("submitBtn").onclick=saveData;
+	}
+	function checkAll()
+	{
+		var a = document.getElementById("name").value;
+		var b = document.getElementById("email").value;
+		var c = document.getElementById("password").value;
+		if(a!="" && b!="" && c!="")
+		{
+			document.getElementById("submitBtn").disabled=false;
+		}
+		else
+		{
+			document.getElementById("submitBtn").disabled=true;
+		}
+	}
+	function saveData()
+	{
+		var nameVal = document.getElementById("name").value;
+		var emailVal = document.getElementById("email").value;
+		var passVal = document.getElementById("password").value;
+
+		if(selectedRow==null)
+		{
+			var table = document.getElementById("myTable");
+			var newRow = table.insertRow(table.rows.length);
+
+			var td1 = newRow.insertCell(0);
+			var td2 = newRow.insertCell(1);
+			var td3 = newRow.insertCell(2);
+			var td4 = newRow.insertCell(3);
+			var td5 = newRow.insertCell(4);
+
+			td1.textContent=nameVal;
+			td2.textContent=emailVal;
+			td3.textContent=passVal;
+
+			var btn1 = document.createElement("button");
+			btn1.textContent="Edit";
+			btn1.onclick=function()
+			{
+				selectedRow=newRow;
+				var val1 = td1.textContent;
+				var val2 = td2.textContent;
+				var val3 = td3.textContent;
+
+				document.getElementById("name").value=val1;
+				document.getElementById("email").value=val2;
+				document.getElementById("password").value=val3;
+				document.getElementById("submitBtn").disabled=false;
+			};
+			var btn2 = document.createElement("button");
+			btn2.textContent="Delete";
+			btn2.onclick=function()
+			{
+				newRow.remove();
+				clearForm();
+				swal("Deleted!","Data Deleted Successfully.","error");
+			};
+			td4.append(btn1);
+			td5.append(btn2);
+			swal("Submitted!","Data Submitted Successfully.","success");
+		}
+		else
+		{
+			selectedRow.cells[0].textContent=nameVal;
+			selectedRow.cells[1].textContent=emailVal;
+			selectedRow.cells[2].textContent=passVal;
+			selectedRow=null;
+			swal("Editted!","Data Editted Successfully.","info");
+		}
+		clearForm();
+	}
+	function clearForm()
+	{
+		document.getElementById("name").value="";
+		document.getElementById("email").value="";
+		document.getElementById("password").value="";
+		document.getElementById("submitBtn").disabled=true;
+	}
+
+</script>
+</head>
+<body onload="page()">
+	<center>
+		<h3>To-do-list</h3>
+		<label>Name - </label><input type="text" id="name" placeholder="Fill The Name"><br><br>
+		<label>Email - </label><input type="text" id="email" placeholder="Fill The Email"><br><br>
+		<label>Password - </label><input type="text" id="password" placeholder="Fill The Password"><br><br>
+
+		<button id="submitBtn" disabled>Submit</button>
+
+		<h3>Table Data</h3>
+		<table id="myTable">
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Password</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</table>
+	</center>
+</body>
+</html>
